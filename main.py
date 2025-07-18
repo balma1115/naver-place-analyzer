@@ -46,12 +46,15 @@ def read_root():
 @app.post("/analyze-place")
 async def analyze_place_endpoint(request: PlaceAnalysisRequest):
     try:
-        # 비동기로 스크레이핑 함수 실행
         result = await run_place_analysis(request.url)
         return {"status": "success", "data": result}
     except Exception as e:
-        return {"status": "error", "message": str(e)}
-
+        # ◀ 2. 에러를 잡아서 500 상태 코드와 함께 JSON으로 응답합니다.
+        print(f"!!! CRITICAL ERROR in /analyze-place: {e}") # Railway 로그에 에러 기록
+        return JSONResponse(
+            status_code=500,
+            content={"status": "error", "message": str(e)}
+        )
 # 2. 키워드 순위 확인 API
 @app.post("/check-rankings")
 async def check_rankings_endpoint(request: KeywordRankRequest):
