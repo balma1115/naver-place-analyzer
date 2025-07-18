@@ -20,4 +20,4 @@ COPY . .
 RUN chmod +x /app/start.sh
 
 # 🔽 7. 스크립트를 통해 서버 실행 (CMD 형식 변경)
-CMD uvicorn main:app --host 0.0.0.0 --port 8080
+CMD uvicorn main:app --host 0.0.0.0 --port 8080 --workers 1
