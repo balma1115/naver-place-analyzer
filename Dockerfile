@@ -16,4 +16,4 @@ RUN playwright install --with-deps
 COPY . .
 
 # 6. 서버 실행 명령어 (Railway가 이 명령어를 사용)
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8080"]
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "$PORT"]
