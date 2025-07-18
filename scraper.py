@@ -180,8 +180,18 @@ async def run_place_analysis(url: str) -> Dict[str, Any]:
     주어진 네이버 지도 URL에서 업체 정보를 스크래핑하여 딕셔너리로 반환합니다.
     """
     async with async_playwright() as p:
-        browser = await p.chromium.launch(headless=True)
+        browser = await p.chromium.launch(
+            headless=True,
+            args=[
+                '--no-sandbox',
+                '--disable-dev-shm-usage',
+                '--disable-gpu',
+                '--disable-web-security',
+                '--disable-features=VizDisplayCompositor'
+            ]
+        )
         page = await browser.new_page()
+        await page.set_viewport_size({"width": 1920, "height": 1080})
         scraped_data = {}
         try:
             await page.goto(url, wait_until="load", timeout=90000)

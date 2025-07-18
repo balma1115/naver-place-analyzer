@@ -11,13 +11,20 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # 4. Playwright 브라우저 설치
-RUN playwright install --with-deps
+RUN playwright install --with-deps chromium
 
 # 5. 프로젝트 소스 코드 복사
 COPY . .
 
-# 🔽 6. 새로운 시작 스크립트 실행 권한 부여
+# 6. 시작 스크립트 실행 권한 부여
 RUN chmod +x /app/start.sh
 
-# 🔽 7. 스크립트를 통해 서버 실행 (CMD 형식 변경)
-CMD python main.py
+# 7. 환경 변수 설정
+ENV PYTHONUNBUFFERED=1
+ENV PYTHONDONTWRITEBYTECODE=1
+
+# 8. 포트 노출
+EXPOSE 8080
+
+# 9. 스크립트를 통해 서버 실행
+CMD ["/app/start.sh"]
