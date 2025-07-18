@@ -68,4 +68,5 @@ async def check_rankings_endpoint(request: KeywordRankRequest):
 # 이 파일이 직접 실행될 때 uvicorn 서버를 실행 (로컬 테스트용)
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8080))
+    print(f"Starting server on port: {port}")  # 디버깅용
     uvicorn.run("main:app", host="0.0.0.0", port=port, workers=1)
