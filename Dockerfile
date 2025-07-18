@@ -1,5 +1,6 @@
 # Dockerfile
-# 1. 베이스 이미지 선택 (Playwright가 필요한 라이브러리 포함)
+
+# 1. 베이스 이미지 선택
 FROM mcr.microsoft.com/playwright/python:v1.44.0-jammy
 
 # 2. 작업 디렉토리 설정
@@ -15,5 +16,8 @@ RUN playwright install --with-deps
 # 5. 프로젝트 소스 코드 복사
 COPY . .
 
-# 6. 서버 실행 명령어 (Railway가 이 명령어를 사용)
-CMD uvicorn main:app --host 0.0.0.0 --port $PORT
+# 🔽 6. 새로운 시작 스크립트 실행 권한 부여
+RUN chmod +x /app/start.sh
+
+# 🔽 7. 스크립트를 통해 서버 실행 (CMD 형식 변경)
+CMD ["/app/start.sh"]
