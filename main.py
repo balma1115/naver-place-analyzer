@@ -3,6 +3,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 from typing import List
+import os
 import uvicorn
 import asyncio
 
@@ -66,4 +67,5 @@ async def check_rankings_endpoint(request: KeywordRankRequest):
 
 # 이 파일이 직접 실행될 때 uvicorn 서버를 실행 (로컬 테스트용)
 if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    port = int(os.environ.get("PORT", 8080))
+    uvicorn.run("main:app", host="0.0.0.0", port=port, workers=1)
