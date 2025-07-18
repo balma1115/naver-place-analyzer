@@ -11,20 +11,13 @@ import asyncio
 # 우리가 만든 스크레이퍼 함수들을 가져옵니다.
 from scraper import run_place_analysis, run_keyword_ranking_check
 
-app = FastAPI()
+app = FastAPI(title="네이버 플레이스 분석기", version="1.0.0")
 
-# CORS 설정: Netlify의 프론트엔드 주소에서 오는 요청을 허용합니다.
-origins = [
-    "https://naverplaceranking.netlify.app", # 내 Netlify 앱 주소
-    "http://localhost:5173", # 로컬에서 테스트할 때 사용하는 주소 (Vite 기본 포트)
-    "http://localhost:3000", # 추가 로컬 포트
-    "http://localhost:8080", # 추가 로컬 포트
-]
-
+# CORS 설정: 모든 origin 허용 (개발 중에는 이렇게 설정)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
-    allow_credentials=True,
+    allow_origins=["*"],  # 모든 origin 허용
+    allow_credentials=False,  # credentials가 false여야 allow_origins=["*"]와 함께 사용 가능
     allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allow_headers=["*"],
 )
@@ -37,6 +30,14 @@ def test_cors_endpoint():
 def health_check():
     return {"status": "healthy", "message": "서버가 정상적으로 작동 중입니다."}
 
+@app.get("/")
+def read_root():
+    return {"message": "네이버 플레이스 분석기 백엔드 서버입니다."}
+
+@app.get("/test")
+def test_endpoint():
+    return {"message": "테스트 엔드포인트가 정상적으로 작동합니다!", "timestamp": "2024-01-01"}
+
 # --- 요청 본문 모델 정의 (프론트엔드에서 보낼 데이터 형식) ---
 class PlaceAnalysisRequest(BaseModel):
     url: str = Field(..., example="https://map.naver.com/p/entry/place/1616011574")
@@ -44,11 +45,6 @@ class PlaceAnalysisRequest(BaseModel):
 class KeywordRankRequest(BaseModel):
     business_name: str = Field(..., example="미래엔영어 벌원학원")
     keywords: List[str] = Field(..., example=["벌원동 영어학원", "탄벌동 수학학원"])
-
-# --- API 엔드포인트 정의 ---
-@app.get("/")
-def read_root():
-    return {"message": "네이버 플레이스 분석기 백엔드 서버입니다."}
 
 # 1. 플레이스 정보 분석 API
 @app.post("/analyze-place")
