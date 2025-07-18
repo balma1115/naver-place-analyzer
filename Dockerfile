@@ -16,12 +16,12 @@ COPY . .
 ENV PYTHONUNBUFFERED=1
 ENV PYTHONDONTWRITEBYTECODE=1
 
-# 포트 노출 (Railway가 자동으로 설정)
-EXPOSE 8000
+# 포트 노출 (Railway가 자동으로 설정 - 보통 8080)
+EXPOSE 8080
 
 # 헬스체크 (더 관대한 설정)
 HEALTHCHECK --interval=60s --timeout=10s --start-period=30s --retries=5 \
     CMD curl -f http://localhost:$PORT/health || exit 1
 
-# 서버 실행
-CMD ["python", "main.py"]
+# 서버 실행 (start.py 사용)
+CMD ["python", "start.py"]

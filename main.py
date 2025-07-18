@@ -92,8 +92,8 @@ signal.signal(signal.SIGTERM, signal_handler)
 
 # 서버 시작 - Railway 환경에 맞게 수정
 if __name__ == "__main__":
-    # Railway는 PORT 환경변수를 자동으로 설정합니다
-    port = int(os.environ.get("PORT", 8000))
+    # Railway는 PORT 환경변수를 자동으로 설정합니다 (보통 8080)
+    port = int(os.environ.get("PORT", 8080))
     print(f"Starting server on port: {port}")
     print(f"Environment: PORT={os.environ.get('PORT', 'not set')}")
     
