@@ -24,6 +24,10 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+@app.get("/test-cors")
+def test_cors_endpoint():
+    return {"message": "CORS test successful!"}
+
 
 # --- 요청 본문 모델 정의 (프론트엔드에서 보낼 데이터 형식) ---
 class PlaceAnalysisRequest(BaseModel):
