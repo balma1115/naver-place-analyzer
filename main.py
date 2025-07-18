@@ -13,7 +13,10 @@ app = FastAPI()
 
 # CORS 설정: Netlify의 프론트엔드 주소에서 오는 요청을 허용합니다.
 # 일단 모든 주소를 허용하도록 '*'로 설정합니다.
-origins = ["*"]
+origins = [
+    "https://naverplaceranking.netlify.app", # 내 Netlify 앱 주소
+    "http://localhost:5173", # 로컬에서 테스트할 때 사용하는 주소 (Vite 기본 포트)
+]
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
