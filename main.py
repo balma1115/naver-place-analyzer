@@ -4,6 +4,8 @@ from pydantic import BaseModel
 from typing import List, Dict, Any
 import uvicorn
 import os
+import signal
+import sys
 
 # FastAPI 앱 생성
 app = FastAPI(
@@ -80,6 +82,14 @@ async def check_rankings(request: KeywordRequest):
     except Exception as e:
         return {"status": "error", "message": str(e)}
 
+# 시그널 핸들러 추가
+def signal_handler(sig, frame):
+    print("Shutting down gracefully...")
+    sys.exit(0)
+
+signal.signal(signal.SIGINT, signal_handler)
+signal.signal(signal.SIGTERM, signal_handler)
+
 # 서버 시작 - Railway 환경에 맞게 수정
 if __name__ == "__main__":
     # Railway는 PORT 환경변수를 자동으로 설정합니다
@@ -92,5 +102,6 @@ if __name__ == "__main__":
         "main:app", 
         host="0.0.0.0", 
         port=port,
-        log_level="info"
+        log_level="info",
+        access_log=True
     )
